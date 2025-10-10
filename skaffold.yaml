@@ -1,0 +1,22 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+build:
+  artifacts:
+    - image: ksenyay/auth
+      context: ./auth
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    envTemplate:
+      template: latest
+  local:
+    push: false
+manifests:
+  rawYaml:
+    - ./infra/k8s/*
+deploy:
+  kubectl: {}
