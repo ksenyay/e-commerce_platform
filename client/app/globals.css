@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/* @plugin "tailwindcss-animate"; */
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+}
+
+:root {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+
+  --background: oklch(10% 0 0); /* very dark */
+  --foreground: oklch(98% 0 0); /* almost white */
+
+  --muted-foreground: oklch(82.344% 0.00009 271.152); /* medium gray text */
+
+  --primary: #b29afb; /* darker primary */
+  --primary-foreground: oklch(98% 0 0); /* text stays white */
+
+  --secondary-foreground: oklch(93.403% 0.00011 271.152); /* text stays white */
+
+  /* 🌸 Pink Accent */
+  --accent: #b29afb;
+  --accent-foreground: oklch(98% 0 0);
+
+  --border: oklch(100% 0.00011 271.152); /* subtle border */
+  --input: oklch(100% 0.00011 271.152); /* dark input background */
+  --ring: oklch(100% 0.00011 271.152); /* visible focus ring */
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased flex flex-col min-h-screen;
+  }
+  main {
+    @apply flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-1 mt-20;
+  }
+
+  h1 {
+    @apply text-3xl font-bold mb-2 text-center;
+  }
+
+  p {
+    @apply text-sm text-secondary-foreground;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  header {
+    @apply w-full fixed top-0 z-50 bg-background/10 backdrop-blur-md border-b border-border/50;
+  }
+
+  nav {
+    @apply container mx-auto px-4 lg:px-10 py-2.5 flex items-center justify-between;
+  }
+
+  footer {
+    @apply w-full text-center p-4 border-t border-border/50;
+  }
+}
+
+@layer utilities {
+  .centered {
+    @apply flex items-center justify-center;
+  }
+
+  .button-group {
+    @apply flex flex-col items-center justify-center gap-2 md:justify-start md:flex-row mt-2 mb-2;
+  }
+
+  .search-bar {
+    @apply rounded-2xl border bg-secondary shadow-none px-5 py-4.5  lg:w-[300px];
+  }
+
+  .card {
+    @apply text-foreground bg-white/5 max-w-[250px] h-[323px] cursor-pointer p-2 rounded-lg flex flex-col transition-transform duration-300 hover:scale-105 hover:bg-white/7;
+  }
+
+  .card-img {
+    @apply w-full h-[200px] object-cover rounded-lg;
+  }
+
+  .shop-container {
+    @apply container flex flex-wrap items-start mb-5 px-5 justify-center gap-5;
+  }
+
+  input:-webkit-autofill {
+    @apply bg-background text-foreground;
+    box-shadow: 0 0 0px 1000px var(--background) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  input:-webkit-autofill:focus {
+    box-shadow: 0 0 0px 1000px var(--background) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+  }
+
+  .auth-form {
+    @apply bg-black/40 backdrop-blur-sm border border-white/10 rounded-3xl p-8 space-y-5;
+  }
+
+  .selected-category {
+    @apply bg-accent text-accent-foreground;
+  }
+}
