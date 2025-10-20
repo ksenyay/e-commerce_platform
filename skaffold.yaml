@@ -8,6 +8,12 @@ build:
         manual:
           - src: src/**/*.ts
             dest: .
+    - image: ksenyay/client
+      context: ./client
+      sync:
+        manual:
+          - src: "**/*"
+            dest: .
       docker:
         dockerfile: Dockerfile
   tagPolicy:
