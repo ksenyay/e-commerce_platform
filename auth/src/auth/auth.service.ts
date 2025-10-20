@@ -22,14 +22,14 @@ export class AuthService {
   }
 
   async signup(data: CreateUserDto, req: Request): Promise<UserDocument> {
-    const { email, password } = data;
+    const { username, email, password } = data;
 
     const hashed = await Password.hash(password);
 
-    const newUser = new this.user({ email, password: hashed });
+    const newUser = new this.user({ username, email, password: hashed });
     try {
       const token = jwt.sign(
-        { id: newUser._id, email: newUser.email },
+        { id: newUser._id, username: newUser.username, email: newUser.email },
         process.env.JWT_SECRET!,
       );
 
@@ -37,10 +37,14 @@ export class AuthService {
 
       return await newUser.save();
     } catch (err) {
-      if (err.code === 11000) {
+      if (err.keyPattern?.email) {
         throw new ConflictException('User with this email already exists');
       }
-      throw err;
+      if (err.keyPattern?.username) {
+        throw new ConflictException('Username already taken');
+      }
+
+      throw new ConflictException('User already exists');
     }
   }
 
@@ -63,13 +67,13 @@ export class AuthService {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, username: user.username, email: user.email },
       process.env.JWT_SECRET!,
     );
 
     req.session = { jwt: token };
 
-    return `User signed in! Email: ${email}, Password: ${password}`;
+    return `User ${user.username} signed in! Email: ${email}, Password: ${password}`;
   }
 
   signout(req: Request): string {
