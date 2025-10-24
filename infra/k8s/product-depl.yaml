@@ -1,40 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: product-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: product
   template:
     metadata:
       labels:
-        app: auth
+        app: product
     spec:
       containers:
-        - name: auth
-          image: ksenyay/auth:latest
+        - name: product
+          image: ksenyay/product:latest
           imagePullPolicy: Never
           env:
             - name: MONGO_URL
-              value: "mongodb://auth-mongo-srv:27017/auth"
+              value: "mongodb://product-mongo-srv:27017/product"
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_SECRET
           ports:
-            - containerPort: 4000
+            - containerPort: 4001
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: product-srv
 spec:
   selector:
-    app: auth
+    app: product
   ports:
     - protocol: TCP
-      port: 4000
-      targetPort: 4000
+      port: 4001
+      targetPort: 4001

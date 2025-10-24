@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: plantio.dev
+    - host: sound.io
       http:
         paths:
           - path: /api/users/?(.*)
@@ -17,6 +17,20 @@ spec:
                 name: auth-srv
                 port:
                   number: 4000
+          - path: /api/products/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: product-srv
+                port:
+                  number: 4001
+          - path: /orders/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: order-srv
+                port:
+                  number: 4002
           - path: /?(.*)
             pathType: ImplementationSpecific
             backend:
