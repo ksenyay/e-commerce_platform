@@ -5,7 +5,7 @@ export const buildClient = (sessionCookie?: string) => {
     baseURL: "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local",
     headers: {
       cookie: sessionCookie ? `session=${sessionCookie}` : "",
-      Host: "plantio.dev",
+      Host: "sound.io",
     },
   });
 };

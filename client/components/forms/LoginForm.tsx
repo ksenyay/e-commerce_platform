@@ -29,8 +29,8 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="w-full max-w-md mx-auto p-4">
+      <div className="w-full max-w-xl mx-auto">
         <form
           onSubmit={submitForm}
           className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-3xl p-7 space-y-5"
@@ -61,7 +61,7 @@ const LoginForm = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="bg-white/5 border-white/10 focus:border-primary/50 rounded-xl h-12 pr-40"
+              className="bg-white/5 border-white/10 focus:border-primary/50 rounded-xl h-12 w-full"
             />
 
             <div className="relative">
@@ -72,7 +72,7 @@ const LoginForm = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-11 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 pr-12"
+                className="h-11 rounded-xl bg-white/5 border-white/10 focus:border-primary/50"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                 <button
