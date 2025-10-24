@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -8,7 +7,7 @@ import cookieSession from 'cookie-session';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.getHttpAdapter().getInstance().set('trust proxy', true);
+  app.getHttpAdapter().getInstance().set('trust proxy', true); // Trust proxy for secure cookies behind proxies/load balancers
 
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined');
@@ -20,7 +19,7 @@ async function bootstrap() {
       secure: true,
       httpOnly: true,
       sameSite: 'none',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 12 * 60 * 60 * 1000, // 12 hours
     }),
   );
 
