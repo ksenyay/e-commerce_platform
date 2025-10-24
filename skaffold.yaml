@@ -14,6 +14,20 @@ build:
         manual:
           - src: "**/*"
             dest: .
+    - image: ksenyay/product
+      context: ./product
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: ksenyay/order
+      context: ./order
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
       docker:
         dockerfile: Dockerfile
   tagPolicy:
