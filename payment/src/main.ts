@@ -1,0 +1,44 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from '@soundio-common/ecommerce-common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import cookieSession from 'cookie-session';
+import * as bodyParser from 'body-parser';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // Allows listening to events
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://user:password@rabbitmq:5672'],
+      queue: 'order_queue',
+      queueOptions: {
+        durable: false,
+      },
+    },
+  });
+
+  app.use(
+    '/api/payments/webhook',
+    bodyParser.raw({ type: 'application/json' }),
+  );
+
+  app.use(
+    cookieSession({
+      signed: false,
+      secure: true,
+    }),
+  );
+
+  app.getHttpAdapter().getInstance().set('trust proxy', true);
+
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  await app.startAllMicroservices();
+  await app.listen(process.env.PORT ?? 4003);
+}
+bootstrap();
