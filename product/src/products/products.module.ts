@@ -9,10 +9,10 @@ import { ProductsController } from './products.controller';
 import { ProductSchema } from '../db/schemas/product.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { CurrentUserMiddleware } from '../../middleware';
-import { RequireAuthMiddleware } from '../../middleware';
+import { CurrentUserMiddleware } from '@soundio-common/ecommerce-common';
+import { RequireAuthMiddleware } from '@soundio-common/ecommerce-common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { EventsService } from '../events/events.service';
+import { StorageService } from '../storage/storage.service';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { EventsService } from '../events/events.service';
     ]),
   ],
   controllers: [ProductsController],
-  providers: [ProductsService, EventsService],
+  providers: [ProductsService, StorageService],
 })
 
 // Auth middleware
@@ -45,6 +45,8 @@ export class ProductsModule implements NestModule {
         { path: 'api/products', method: RequestMethod.POST },
         { path: 'api/products/:id', method: RequestMethod.PATCH },
         { path: 'api/products/:id', method: RequestMethod.DELETE },
+        { path: 'api/products/my-products/:id', method: RequestMethod.GET },
+        { path: 'api/products/downloads/:id', method: RequestMethod.PATCH },
       );
   }
 }

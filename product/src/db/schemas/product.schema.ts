@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type ProductDocument = HydratedDocument<Product>;
 
-export type Category =
+type Category =
   | 'nature'
   | 'urban'
   | 'noise'
@@ -23,19 +23,16 @@ export class Product {
   userId: string;
 
   @Prop({ required: true })
+  username: string;
+
+  @Prop({ required: true })
   price: number;
 
-  // @Prop({ required: true })
-  // duration: number;
+  @Prop({ required: true })
+  imageUrl: string;
 
-  // @Prop({ required: true })
-  // fileSize: number;
-
-  // @Prop({ required: true })
-  // imageUrl: string;
-
-  // @Prop({ required: true })
-  // fileUrl: string;
+  @Prop({ required: true })
+  fileUrl: string;
 
   @Prop({ type: [String], default: [] })
   tags: string[];
@@ -53,8 +50,14 @@ export class Product {
   })
   category: Category;
 
-  @Prop({ default: 0 })
+  @Prop({ default: 0, required: false })
   downloads: number;
+
+  @Prop({ required: false, default: 'unknown' })
+  duration: string;
+
+  @Prop({ required: false, default: 'unknown' })
+  size: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

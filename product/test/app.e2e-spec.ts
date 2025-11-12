@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { AllExceptionsFilter } from '../filters/all-exceptions.filter';
+import { AllExceptionsFilter } from '@soundio-common/ecommerce-common';
 import { AppModule } from '../src/app.module';
 import { getConnectionToken } from '@nestjs/mongoose';
 import * as jwt from 'jsonwebtoken';
@@ -33,14 +33,14 @@ describe('Product [e2e]', () => {
   let app: INestApplication;
   let mongo: MongoMemoryServer;
   let connection: mongoose.Connection;
-  let ProductModel: mongoose.Model<any>;
+  let productModel: mongoose.Model<any>;
 
   beforeAll(async () => {
     mongo = await MongoMemoryServer.create();
     const mongoUri = mongo.getUri();
 
     connection = mongoose.createConnection(mongoUri);
-    ProductModel = connection.model('Product', ProductSchema);
+    productModel = connection.model('Product', ProductSchema);
 
     const mockRabbitClient = {
       emit: jest.fn(),
@@ -130,7 +130,7 @@ describe('Product [e2e]', () => {
         downloads: 10,
       };
 
-      let products = await ProductModel.find({});
+      let products = await productModel.find({});
       expect(products.length).toEqual(0);
 
       await request(app.getHttpServer())
@@ -139,7 +139,7 @@ describe('Product [e2e]', () => {
         .send(product)
         .expect(201);
 
-      products = await ProductModel.find({});
+      products = await productModel.find({});
       expect(products.length).toEqual(1);
     });
   });
@@ -305,5 +305,40 @@ describe('Product [e2e]', () => {
 
       expect(updatedProduct).toBeDefined();
     });
+  });
+
+  // MONGO TESTING
+
+  it('implements optimistic concurrency control', async () => {
+    // Create and save a product
+    const product = await productModel.create({
+      title: 'Test',
+      description: 'desc',
+      userId: 'user1',
+      price: 10,
+      tags: [],
+      category: 'nature',
+      downloads: 0,
+    });
+
+    // Fetch twice
+    const firstInstance = await productModel.findById(product.id);
+    const secondInstance = await productModel.findById(product.id);
+
+    // Make two changes
+    firstInstance!.set({ price: 20 });
+    secondInstance!.set({ price: 30 });
+
+    // Save first
+    await firstInstance!.save();
+
+    // Save second and expect error
+    let errorThrown = false;
+    try {
+      await secondInstance!.save();
+    } catch (err) {
+      errorThrown = true;
+    }
+    expect(errorThrown).toBe(true);
   });
 });
