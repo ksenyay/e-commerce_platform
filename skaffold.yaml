@@ -30,6 +30,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+    - image: ksenyay/payment
+      context: ./payment
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
   tagPolicy:
     envTemplate:
       template: latest
