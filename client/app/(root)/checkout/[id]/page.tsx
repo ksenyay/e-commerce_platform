@@ -1,14 +1,18 @@
-import { buildClient } from "@/api/buildClient";
-import ProductPage from "@/components/products/ProductPage";
+import React from "react";
+import Checkout from "@/components/products/Checkout";
 import { CurrentUser } from "@/types/types";
 import { cookies } from "next/headers";
+import { buildClient } from "@/api/buildClient";
 
-export default async function Home({ params }: { params: { id: string } }) {
+const CheckoutPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
   const { id } = await params;
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session")?.value;
   const client = buildClient(sessionCookie);
-  let isLoggedIn = false;
 
   let currentUser: CurrentUser | null = null;
 
@@ -16,8 +20,8 @@ export default async function Home({ params }: { params: { id: string } }) {
     const userRes = await client.get("/api/users/currentuser");
     currentUser = userRes.data.currentUser;
 
-    if (currentUser) {
-      isLoggedIn = true;
+    if (!currentUser) {
+      return;
     }
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -25,12 +29,10 @@ export default async function Home({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="page-container mt-0">
-      <ProductPage
-        id={id}
-        isLoggedIn={isLoggedIn}
-        userId={currentUser?.id ?? null}
-      />
-    </div>
+    <>
+      <Checkout id={id} email={currentUser!.email} />
+    </>
   );
-}
+};
+
+export default CheckoutPage;

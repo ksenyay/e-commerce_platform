@@ -2,29 +2,25 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import useRequest from "../../hooks/sendRequest";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "./ProfileDropdown";
-import { Search, ShoppingCart } from "lucide-react";
-
-interface CurrentUser {
-  email: string;
-  id: string;
-  iat: number;
-}
+import { Search } from "lucide-react";
+import { CurrentUser } from "@/types/types";
 
 const Nav = ({ currentUser }: { currentUser: CurrentUser | null }) => {
+  const [search, setSearch] = useState("");
   const pathName = usePathname();
   const router = useRouter();
+  const [params, setParams] = useState<URLSearchParams>(new URLSearchParams());
 
   const { makeRequest } = useRequest({
     url: "/api/users/signout",
     method: "post",
-    body: {},
   });
 
   async function signout() {
@@ -35,6 +31,31 @@ const Nav = ({ currentUser }: { currentUser: CurrentUser | null }) => {
       console.error("Signout failed:", error);
     }
   }
+
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setSearch(value);
+    localStorage.setItem("searchInput", value);
+
+    // Always work with a fresh copy of params
+    const newParams = new URLSearchParams(params.toString());
+    if (value === "") {
+      newParams.delete("search");
+      setSearch("");
+    } else {
+      newParams.set("search", value);
+    }
+    newParams.set("page", "1");
+
+    router.push(`?${newParams.toString()}`);
+    setParams(newParams);
+  }
+
+  useEffect(() => {
+    setParams(new URLSearchParams(window.location.search));
+    const savedSearch = localStorage.getItem("searchInput") || "";
+    setSearch(savedSearch);
+  }, []);
 
   return (
     <>
@@ -72,6 +93,8 @@ const Nav = ({ currentUser }: { currentUser: CurrentUser | null }) => {
             type="text"
             className="search-bar border-white/20"
             placeholder="Search sounds..."
+            value={search}
+            onChange={(e) => handleSearch(e)}
           />
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         </div>
@@ -81,12 +104,11 @@ const Nav = ({ currentUser }: { currentUser: CurrentUser | null }) => {
         {currentUser !== null ? (
           <div className="flex flex-row gap-3 justify-center items-center">
             <div className=" cursor-pointer bg-white/5 hover:bg-white/10 p-2 rounded-2xl hover:scale-105 transition-all duration-200">
-              <Link href="/cart" className="flex flex-row gap-2 items-center">
-                <ShoppingCart className="w-4 h-4" />
-                <p className="font-bold text-sm">Cart (0)</p>
+              <Link href="/new" className="flex flex-row gap-2 items-center">
+                <p className="font-bold text-sm">+ Add New</p>
               </Link>
             </div>
-            <ProfileDropdown signout={signout} />
+            <ProfileDropdown signout={signout} user={currentUser} />
           </div>
         ) : (
           <>

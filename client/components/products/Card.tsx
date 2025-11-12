@@ -11,7 +11,7 @@ interface CardProps {
     title: string;
     description: string;
     price: number;
-    likes: number;
+    downloads: number;
     imageUrl: string;
   };
 }
@@ -52,7 +52,7 @@ const Card = ({ card }: CardProps) => {
           <span className="font-bold text-primary text-lg">${card.price}</span>
           <span className="flex flex-row items-center gap-1.5 text-muted-foreground">
             <Download className="w-4 h-4" />
-            <span className="text-sm">{card.likes}</span>
+            <span className="text-sm">{card.downloads}</span>
           </span>
         </div>
       </div>

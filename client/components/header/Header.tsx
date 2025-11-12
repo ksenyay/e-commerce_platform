@@ -4,12 +4,7 @@ import Image from "next/image";
 import { cookies } from "next/headers";
 import { buildClient } from "@/api/buildClient";
 import Nav from "./Nav";
-
-interface CurrentUser {
-  email: string;
-  id: string;
-  iat: number;
-}
+import { CurrentUser } from "@/types/types";
 
 const Header = async () => {
   let currentUser: CurrentUser | null = null;

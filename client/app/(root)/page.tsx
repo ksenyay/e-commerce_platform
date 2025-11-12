@@ -1,9 +1,5 @@
 import Products from "@/components/products/Products";
 
-export default async function Home() {
-  return (
-    <>
-      <Products />
-    </>
-  );
+export default async function ProductsPage() {
+  return <Products />;
 }

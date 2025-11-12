@@ -25,7 +25,7 @@ const LoginForm = () => {
 
   async function submitForm(e: React.FormEvent) {
     e.preventDefault();
-    makeRequest();
+    await makeRequest();
   }
 
   return (
