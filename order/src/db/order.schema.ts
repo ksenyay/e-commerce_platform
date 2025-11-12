@@ -1,26 +1,31 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { OrderStatus } from '../types/types';
 
 export type OrderDocument = HydratedDocument<Order>;
 
 @Schema()
 export class Order {
-  @Prop()
+  @Prop({ required: true })
   userId: string;
 
-  @Prop()
-  status: string;
+  @Prop({ type: String, enum: OrderStatus, required: true })
+  status: OrderStatus;
 
   @Prop()
-  expiresAt: string;
+  expiresAt: Date;
 
-  @Prop()
-  productId: string;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true,
+  })
+  product: mongoose.Types.ObjectId;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
 
-// defining the JSON transform
+// JSON transform
 OrderSchema.set('toJSON', {
   transform: (doc, ret: any) => {
     ret.id = ret._id;

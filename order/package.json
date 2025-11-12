@@ -26,10 +26,20 @@
     "@nestjs/microservices": "^11.1.7",
     "@nestjs/mongoose": "^11.0.3",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.0.1",
+    "@soundio-common/ecommerce-common": "^1.0.4",
+    "amqp-connection-manager": "^5.0.0",
+    "amqplib": "^0.10.9",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "cookie-session": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
+    "mongodb-memory-server": "^10.2.3",
     "mongoose": "^8.19.2",
+    "mongoose-update-if-current": "^1.4.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "stripe": "^19.3.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
