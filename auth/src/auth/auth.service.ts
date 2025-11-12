@@ -8,7 +8,7 @@ import {
 import type { Request } from 'express';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/db/schemas/user.schema';
+import { User, UserDocument } from '../db/schemas/user.schema';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { Password } from '../utils/password';
 import * as jwt from 'jsonwebtoken';
@@ -77,7 +77,7 @@ export class AuthService {
   }
 
   signout(req: Request): string {
-    req.session = null;
+    req.session = undefined;
     return 'User signed out';
   }
 }

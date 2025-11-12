@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { AllExceptionsFilter } from 'filters/all-exceptions.filter';
+import { AllExceptionsFilter } from '@soundio-common/ecommerce-common';
 import cookieSession from 'cookie-session';
 
 async function bootstrap() {
@@ -16,10 +16,10 @@ async function bootstrap() {
   app.use(
     cookieSession({
       signed: false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      sameSite: 'none',
-      maxAge: 12 * 60 * 60 * 1000, // 12 hours
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 12 * 60 * 60 * 1000,
     }),
   );
 

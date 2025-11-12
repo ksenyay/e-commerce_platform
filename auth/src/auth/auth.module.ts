@@ -8,7 +8,10 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserSchema } from '../db/schemas/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CurrentUserMiddleware, RequireAuthMiddleware } from './middleware';
+import {
+  CurrentUserMiddleware,
+  RequireAuthMiddleware,
+} from '@soundio-common/ecommerce-common';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
