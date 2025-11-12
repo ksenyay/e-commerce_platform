@@ -19,6 +19,16 @@ spec:
           env:
             - name: MONGO_URL
               value: "mongodb://order-mongo-srv:27017/order"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_SECRET
+            - name: STRIPE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_KEY
           ports:
             - containerPort: 4002
 ---

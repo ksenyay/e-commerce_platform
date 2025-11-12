@@ -4,6 +4,7 @@ metadata:
   name: ingress-service
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
   ingressClassName: nginx
   rules:
@@ -24,13 +25,20 @@ spec:
                 name: product-srv
                 port:
                   number: 4001
-          - path: /orders/?(.*)
+          - path: /api/orders/?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: order-srv
                 port:
                   number: 4002
+          - path: /api/payments/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: payment-srv
+                port:
+                  number: 4003
           - path: /?(.*)
             pathType: ImplementationSpecific
             backend:
