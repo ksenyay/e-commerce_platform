@@ -7,6 +7,8 @@ import cookieSession from 'cookie-session';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  console.log('Github Actions Test');
+
   app.getHttpAdapter().getInstance().set('trust proxy', true); // Trust proxy for secure cookies behind proxies/load balancers
 
   if (!process.env.JWT_SECRET) {

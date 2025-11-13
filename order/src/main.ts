@@ -8,6 +8,8 @@ import cookieSession from 'cookie-session';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  console.log('Github Actions Test');
+
   if (!(global as any).crypto) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     (global as any).crypto = require('crypto');
