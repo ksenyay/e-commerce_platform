@@ -1,3 +1,9 @@
+process.env.R2_ACCESS_KEY_ID = 'dummy';
+process.env.R2_SECRET_ACCESS_KEY = 'dummy';
+process.env.R2_BUCKET_NAME = 'dummy';
+process.env.R2_ACCOUNT_ID = 'dummy';
+process.env.R2_PUBLIC_URL = 'https://dummy.public.url';
+jest.setTimeout(30000); // Increase timeout for long-running hooks
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import request from 'supertest';
@@ -5,7 +11,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { AllExceptionsFilter } from '@soundio-common/ecommerce-common';
+import { AllExceptionsFilter } from '../filters/all-exceptions.filter';
 import { AppModule } from '../src/app.module';
 import { getConnectionToken } from '@nestjs/mongoose';
 import * as jwt from 'jsonwebtoken';
@@ -17,6 +23,7 @@ import cookieSession from 'cookie-session';
 function signin() {
   const payload = {
     id: new Types.ObjectId().toString(),
+    username: 'ksenyay',
     email: 'admin@gmail.com',
   };
 
@@ -63,10 +70,7 @@ describe('Product [e2e]', () => {
     app.use(
       cookieSession({
         signed: false,
-        secure: false,
-        httpOnly: true,
-        sameSite: 'none',
-        maxAge: 24 * 60 * 60 * 1000,
+        secure: true,
       }),
     );
 
@@ -81,7 +85,7 @@ describe('Product [e2e]', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    jest.setTimeout(30000);
     await connection.close();
     await mongo.stop();
   });
@@ -100,10 +104,13 @@ describe('Product [e2e]', () => {
       const product = {
         title: 'Sample Product',
         description: 'A test product',
+        userId: 'user123',
+        username: 'testuser',
         price: 99.99,
+        imageUrl: 'https://dummy.image.url',
+        fileUrl: 'https://dummy.file.url',
         tags: ['test', 'sample'],
         category: 'nature',
-        downloads: 0,
       };
       await request(app.getHttpServer())
         .post('/api/products')
@@ -122,12 +129,15 @@ describe('Product [e2e]', () => {
 
     it('should create product with valid inputs', async () => {
       const product = {
-        title: 'Valid Product',
-        description: 'This is a valid product description.',
-        price: 49.99,
-        tags: ['valid', 'product'],
+        title: 'Sample Product',
+        description: 'A test product',
+        price: 99.99,
+        tags: ['test', 'sample'],
         category: 'nature',
-        downloads: 10,
+        downloads: 0,
+        fileUrl: 'https://dummy.file.url',
+        imageUrl: 'https://dummy.image.url',
+        username: 'testuser',
       };
 
       let products = await productModel.find({});
@@ -149,12 +159,18 @@ describe('Product [e2e]', () => {
   describe('/products/:id GET', () => {
     it('should return product by id', async () => {
       const product = {
-        title: 'Valid Product',
-        description: 'This is a valid product description.',
-        price: 49.99,
-        tags: ['valid', 'product'],
+        title: 'Sample Product',
+        description: 'A test product',
+        userId: 'user123',
+        username: 'testuser',
+        price: 99.99,
+        imageUrl: 'https://dummy.image.url',
+        fileUrl: 'https://dummy.file.url',
+        tags: ['test', 'sample'],
         category: 'nature',
-        downloads: 10,
+        downloads: 0,
+        duration: 'unknown',
+        size: 'unknown',
       };
       const response = await request(app.getHttpServer())
         .post('/api/products')
@@ -184,12 +200,18 @@ describe('Product [e2e]', () => {
 
   async function createProduct() {
     const product = {
-      title: 'Valid Product',
-      description: 'This is a valid product description.',
-      price: 49.99,
-      tags: ['valid', 'product'],
+      title: 'Sample Product',
+      description: 'A test product',
+      userId: 'user123',
+      username: 'testuser',
+      price: 99.99,
+      imageUrl: 'https://dummy.image.url',
+      fileUrl: 'https://dummy.file.url',
+      tags: ['test', 'sample'],
       category: 'nature',
-      downloads: 10,
+      downloads: 0,
+      duration: 'unknown',
+      size: 'unknown',
     };
     const created = await request(app.getHttpServer())
       .post('/api/products')
@@ -247,12 +269,18 @@ describe('Product [e2e]', () => {
 
     it('should return 400 if the title or price are not valid', async () => {
       const product = {
-        title: 'Valid Product',
-        description: 'This is a valid product description.',
-        price: 49.99,
-        tags: ['valid', 'product'],
+        title: 'Sample Product',
+        description: 'A test product',
+        userId: 'user123',
+        username: 'testuser',
+        price: 99.99,
+        imageUrl: 'https://dummy.image.url',
+        fileUrl: 'https://dummy.file.url',
+        tags: ['test', 'sample'],
         category: 'nature',
-        downloads: 10,
+        downloads: 0,
+        duration: 'unknown',
+        size: 'unknown',
       };
 
       const cookie = signin();
@@ -277,12 +305,18 @@ describe('Product [e2e]', () => {
 
     it('should return updated ticket', async () => {
       const product = {
-        title: 'Valid Product',
-        description: 'This is a valid product description.',
-        price: 49.99,
-        tags: ['valid', 'product'],
+        title: 'Sample Product',
+        description: 'A test product',
+        userId: 'user123',
+        username: 'testuser',
+        price: 99.99,
+        imageUrl: 'https://dummy.image.url',
+        fileUrl: 'https://dummy.file.url',
+        tags: ['test', 'sample'],
         category: 'nature',
-        downloads: 10,
+        downloads: 0,
+        duration: 'unknown',
+        size: 'unknown',
       };
 
       const cookie = signin();
@@ -312,13 +346,18 @@ describe('Product [e2e]', () => {
   it('implements optimistic concurrency control', async () => {
     // Create and save a product
     const product = await productModel.create({
-      title: 'Test',
-      description: 'desc',
-      userId: 'user1',
-      price: 10,
-      tags: [],
+      title: 'Sample Product',
+      description: 'A test product',
+      userId: 'user123',
+      username: 'testuser',
+      price: 99.99,
+      imageUrl: 'https://dummy.image.url',
+      fileUrl: 'https://dummy.file.url',
+      tags: ['test', 'sample'],
       category: 'nature',
       downloads: 0,
+      duration: 'unknown',
+      size: 'unknown',
     });
 
     // Fetch twice

@@ -4,16 +4,16 @@ import { randomUUID } from 'crypto';
 
 @Injectable()
 export class StorageService {
-  private s3: S3Client;
+  private r2: S3Client;
   private bucket: string;
   private endpoint: string;
   private publicUrl: string;
 
   constructor() {
-    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-    const bucket = process.env.S3_BUCKET_NAME;
-    const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+    const accessKeyId = process.env.R2_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
+    const bucket = process.env.R2_BUCKET_NAME;
+    const accountId = process.env.R2_ACCOUNT_ID;
     const publicUrl = process.env.R2_PUBLIC_URL;
 
     if (
@@ -30,7 +30,7 @@ export class StorageService {
     this.publicUrl = publicUrl;
     this.endpoint = `https://${accountId}.r2.cloudflarestorage.com`;
 
-    this.s3 = new S3Client({
+    this.r2 = new S3Client({
       region: 'auto',
       endpoint: this.endpoint,
       credentials: {
@@ -43,7 +43,7 @@ export class StorageService {
   async uploadFile(file: Express.Multer.File, folder = ''): Promise<string> {
     const key = `${folder}${randomUUID()}-${file.originalname}`;
 
-    await this.s3.send(
+    await this.r2.send(
       new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
@@ -52,7 +52,6 @@ export class StorageService {
       }),
     );
 
-    // ✅ Return the public URL (NOT the S3 endpoint)
     return `${this.publicUrl}/${key}`;
   }
 }

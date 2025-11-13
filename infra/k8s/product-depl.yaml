@@ -24,21 +24,19 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_SECRET
-            - name: AWS_REGION
-              value: "eu-central-1"
-            - name: AWS_ACCESS_KEY_ID
+            - name: R2_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: aws-access-key-id
-                  key: AWS_ACCESS_KEY_ID
-            - name: AWS_SECRET_ACCESS_KEY
+                  name: r2-access-key-id
+                  key: R2_ACCESS_KEY_ID
+            - name: R2_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: aws-secret-access-key
-                  key: AWS_SECRET_ACCESS_KEY
-            - name: S3_BUCKET_NAME
+                  name: r2-secret-access-key
+                  key: R2_SECRET_ACCESS_KEY
+            - name: R2_BUCKET_NAME
               value: "soundio-storage"
-            - name: CLOUDFLARE_ACCOUNT_ID
+            - name: R2_ACCOUNT_ID
               value: "590885aa0a9d29e5d71a7a61ec6969aa"
             - name: R2_PUBLIC_URL
               value: "https://pub-6253a91849cf4221ab5108b450c39f1a.r2.dev"

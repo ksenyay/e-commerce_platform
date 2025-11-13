@@ -12,7 +12,7 @@ import ProfileDropdown from "./ProfileDropdown";
 import { Search } from "lucide-react";
 import { CurrentUser } from "@/types/types";
 
-const Nav = ({ currentUser }: { currentUser: CurrentUser | null }) => {
+const Nav = ({ currentUser }: { currentUser: CurrentUser | undefined }) => {
   const [search, setSearch] = useState("");
   const pathName = usePathname();
   const router = useRouter();
@@ -101,7 +101,7 @@ const Nav = ({ currentUser }: { currentUser: CurrentUser | null }) => {
       </div>
 
       <div className="hidden md:flex flex-col items-center justify-center gap-2 md:justify-start md:flex-row mt-2 mb-2">
-        {currentUser !== null ? (
+        {currentUser !== undefined ? (
           <div className="flex flex-row gap-3 justify-center items-center">
             <div className=" cursor-pointer bg-white/5 hover:bg-white/10 p-2 rounded-2xl hover:scale-105 transition-all duration-200">
               <Link href="/new" className="flex flex-row gap-2 items-center">

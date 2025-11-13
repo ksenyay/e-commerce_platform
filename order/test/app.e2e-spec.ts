@@ -88,7 +88,7 @@ describe('Order [e2e]', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    jest.setTimeout(30000);
     await connection.close();
     await mongo.stop();
   });

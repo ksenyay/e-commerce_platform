@@ -61,7 +61,6 @@ export class ProductsController {
     @UploadedFiles()
     files: { image?: Express.Multer.File[]; file?: Express.Multer.File[] },
   ) {
-    // Upload files to S3
     const uploadedFiles: any = {};
 
     if (files.image) {

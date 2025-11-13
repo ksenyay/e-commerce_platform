@@ -8,10 +8,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserSchema } from '../db/schemas/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
-import {
-  CurrentUserMiddleware,
-  RequireAuthMiddleware,
-} from '@soundio-common/ecommerce-common';
+import { CurrentUserMiddleware } from './middleware';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
@@ -24,9 +21,9 @@ export class AuthModule implements NestModule {
       path: 'api/users/currentuser',
       method: RequestMethod.GET,
     });
-    consumer.apply(RequireAuthMiddleware).forRoutes({
-      path: 'api/users/currentuser',
-      method: RequestMethod.GET,
-    });
+    // consumer.apply(RequireAuthMiddleware).forRoutes({
+    //   path: 'api/users/currentuser',
+    //   method: RequestMethod.GET,
+    // });
   }
 }

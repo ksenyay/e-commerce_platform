@@ -10,10 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OrderSchema } from '../db/order.schema';
 import { ProductSchema } from '../db/product.schema';
-import {
-  CurrentUserMiddleware,
-  RequireAuthMiddleware,
-} from '@soundio-common/ecommerce-common';
+import { CurrentUserMiddleware, RequireAuthMiddleware } from './middleware';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({

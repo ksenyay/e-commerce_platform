@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { AllExceptionsFilter } from '@soundio-common/ecommerce-common';
+import { AllExceptionsFilter } from '../filters/all-exceptions.filter';
 import cookieSession from 'cookie-session';
 
 async function bootstrap() {

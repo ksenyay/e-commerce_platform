@@ -14,6 +14,7 @@ type ProfileDropdownProps = {
 
 const ProfileDropdown = (props: ProfileDropdownProps) => {
   const { signout, user } = props;
+
   return (
     <Popover>
       <PopoverTrigger>

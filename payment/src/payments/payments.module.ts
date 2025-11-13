@@ -8,10 +8,7 @@ import { PaymentsService } from './payments.service';
 import { PaymentsController } from './payments.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OrderSchema } from '../db/order.schema';
-import {
-  CurrentUserMiddleware,
-  RequireAuthMiddleware,
-} from '@soundio-common/ecommerce-common';
+import { CurrentUserMiddleware, RequireAuthMiddleware } from './middleware';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PaymentSchema } from '../db/payment.schema';
 

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
@@ -15,7 +12,11 @@ import cookieSession from 'cookie-session';
 async function authorizeUser(app: INestApplication): Promise<string[]> {
   const response = await request(app.getHttpServer())
     .post('/api/users/signup')
-    .send({ email: 'ksenya@gmail.com', password: 'mypassword1' })
+    .send({
+      username: 'ksenyay',
+      email: 'ksenya@gmail.com',
+      password: 'asdasd1',
+    })
     .expect(201);
 
   const cookie = response.get('Set-Cookie');
@@ -52,10 +53,10 @@ describe('Auth [e2e]', () => {
     app.use(
       cookieSession({
         signed: false,
-        secure: false,
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         sameSite: 'none',
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 12 * 60 * 60 * 1000,
       }),
     );
 
@@ -82,6 +83,7 @@ describe('Auth [e2e]', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -95,6 +97,7 @@ describe('Auth [e2e]', () => {
       return request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'invalid-email',
           password: 'mypassword1',
         })
@@ -105,6 +108,7 @@ describe('Auth [e2e]', () => {
       return request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: '123',
         })
@@ -115,6 +119,7 @@ describe('Auth [e2e]', () => {
       await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
         })
         .expect(400);
@@ -136,6 +141,7 @@ describe('Auth [e2e]', () => {
       await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -144,6 +150,7 @@ describe('Auth [e2e]', () => {
       await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -154,6 +161,7 @@ describe('Auth [e2e]', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -170,6 +178,7 @@ describe('Auth [e2e]', () => {
       return request(app.getHttpServer())
         .post('/api/users/signin')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -180,6 +189,7 @@ describe('Auth [e2e]', () => {
       await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -188,6 +198,7 @@ describe('Auth [e2e]', () => {
       return request(app.getHttpServer())
         .post('/api/users/signin')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'sssdsss1',
         })
@@ -198,6 +209,7 @@ describe('Auth [e2e]', () => {
       await request(app.getHttpServer())
         .post('/api/users/signup')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -206,6 +218,7 @@ describe('Auth [e2e]', () => {
       const response = await request(app.getHttpServer())
         .post('/api/users/signin')
         .send({
+          username: 'ksenyay',
           email: 'ksenya@gmail.com',
           password: 'mypassword1',
         })
@@ -221,7 +234,11 @@ describe('Auth [e2e]', () => {
     it('should clear the cookie on signout', async () => {
       await request(app.getHttpServer())
         .post('/api/users/signup')
-        .send({ email: 'ksenya@gmail.com', password: 'mypassword1' })
+        .send({
+          username: 'ksenyay',
+          email: 'ksenya@gmail.com',
+          password: 'mypassword1',
+        })
         .expect(201);
 
       const response = await request(app.getHttpServer())
@@ -255,19 +272,20 @@ describe('Auth [e2e]', () => {
       expect(response.body).toEqual({
         currentUser: {
           email: 'ksenya@gmail.com',
+          username: 'ksenyay',
           id: expect.any(String),
           iat: expect.any(Number),
         },
       });
     });
 
-    it('should respond with null if not authenticated', async () => {
+    it('should respond with undefined if not authenticated', async () => {
       const response = await request(app.getHttpServer())
         .get('/api/users/currentuser')
         .send()
         .expect(200);
 
-      expect(response.body).toEqual({ currentUser: null });
+      expect(response.body).toEqual({ currentUser: undefined });
     });
   });
 });

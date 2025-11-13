@@ -9,8 +9,8 @@ import { ProductsController } from './products.controller';
 import { ProductSchema } from '../db/schemas/product.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { CurrentUserMiddleware } from '@soundio-common/ecommerce-common';
-import { RequireAuthMiddleware } from '@soundio-common/ecommerce-common';
+import { CurrentUserMiddleware } from './middleware';
+import { RequireAuthMiddleware } from './middleware';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { StorageService } from '../storage/storage.service';
 

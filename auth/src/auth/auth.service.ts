@@ -17,8 +17,8 @@ import * as jwt from 'jsonwebtoken';
 export class AuthService {
   constructor(@InjectModel(User.name) private user: Model<User>) {}
 
-  getCurrentUser(req: Request): { currentUser: object | null } {
-    return { currentUser: req.currentUser || null };
+  getCurrentUser(req: Request): { currentUser: object | undefined } {
+    return { currentUser: req.currentUser || undefined };
   }
 
   async signup(data: CreateUserDto, req: Request): Promise<UserDocument> {
