@@ -11,9 +11,13 @@ const CancelPage = () => {
   const [productId, setProductId] = useState();
 
   async function handleCancelledCase() {
-    const res = await axios.post("/api/payments/cancelled", {
-      sessionId,
-    });
+    const res = await axios.post(
+      "http://localhost:4003/api/payments/cancelled",
+      {
+        sessionId,
+      },
+      { withCredentials: true }
+    );
 
     setProductId(res.data.productId);
   }

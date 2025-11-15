@@ -29,7 +29,7 @@ const CreateSoundForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { makeRequest, errors } = useRequest({
-    url: "/api/products",
+    url: "http://localhost:4001/api/products",
     method: "post",
     isFormData: true,
   });

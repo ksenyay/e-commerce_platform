@@ -13,7 +13,9 @@ const Products = async () => {
   if (sessionCookie) {
     try {
       const client = buildClient(sessionCookie);
-      const { data } = await client.get("/api/users/currentuser");
+      const { data } = await client.get(
+        "http://auth:4000/api/users/currentuser"
+      );
       userId = data?.currentUser?.id || null;
     } catch (error) {
       console.error("Error fetching user:", error);

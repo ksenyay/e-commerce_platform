@@ -14,7 +14,7 @@ const ProfilePage = async () => {
   let products: Product[] = [];
 
   try {
-    const userRes = await client.get("/api/users/currentuser");
+    const userRes = await client.get("http://auth:4000/api/users/currentuser");
     currentUser = userRes.data.currentUser;
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -27,7 +27,7 @@ const ProfilePage = async () => {
 
   try {
     const productsRes = await client.get(
-      `/api/products/my-products/${currentUser.id}`
+      `http://product:4001/api/products/my-products/${currentUser.id}`
     );
     products = productsRes.data;
   } catch (error) {

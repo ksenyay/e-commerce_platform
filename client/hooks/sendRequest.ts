@@ -27,6 +27,7 @@ export default ({ url, method, body, isFormData = false }: RequestOptions) => {
         url,
         data: formData ? formData : body,
         headers,
+        withCredentials: true,
       });
 
       console.log("Success:", response.data);

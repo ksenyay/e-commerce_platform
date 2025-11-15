@@ -1,0 +1,98 @@
+services:
+  auth:
+    image: ksenyay/auth:latest
+    build: ./auth
+    environment:
+      MONGO_URL: ${AUTH_MONGO_URL}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "4000:4000"
+    depends_on:
+      - auth-mongo
+
+  auth-mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+
+  order:
+    image: ksenyay/order:latest
+    build: ./order
+    environment:
+      MONGO_URL: ${ORDER_MONGO_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      STRIPE_KEY: ${STRIPE_KEY}
+    ports:
+      - "4002:4002"
+    depends_on:
+      - order-mongo
+
+  order-mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27018:27017"
+
+  payment:
+    image: ksenyay/payment:latest
+    build: ./payment
+    environment:
+      MONGO_URL: ${PAYMENT_MONGO_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      STRIPE_KEY: ${STRIPE_KEY}
+    ports:
+      - "4003:4003"
+    depends_on:
+      - payment-mongo
+
+  payment-mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27019:27017"
+
+  product:
+    image: ksenyay/product:latest
+    build: ./product
+    environment:
+      MONGO_URL: ${PRODUCT_MONGO_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY}
+      R2_BUCKET_NAME: soundio-storage
+      R2_ACCOUNT_ID: 590885aa0a9d29e5d71a7a61ec6969aa
+      R2_PUBLIC_URL: https://pub-6253a91849cf4221ab5108b450c39f1a.r2.dev
+    ports:
+      - "4001:4001"
+    depends_on:
+      - product-mongo
+
+  product-mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27020:27017"
+
+  client:
+    image: ksenyay/client:latest
+    build: ./client
+    ports:
+      - "3000:3000"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672"
+      - "15672:15672"

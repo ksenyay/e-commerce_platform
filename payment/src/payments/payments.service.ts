@@ -43,8 +43,8 @@ export class PaymentsService {
       customer_email: email,
       client_reference_id: order.id,
       metadata: { orderId: order.id },
-      success_url: `http://sound.io/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `http://sound.io/checkout/cancel`,
+      success_url: `http://localhost:3000/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://localhost:3000/checkout/cancel`,
     });
 
     return { url: session.url };

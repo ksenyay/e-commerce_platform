@@ -13,6 +13,11 @@ async function bootstrap() {
 
   app.getHttpAdapter().getInstance().set('trust proxy', true);
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   app.use(
     cookieSession({
       signed: false,

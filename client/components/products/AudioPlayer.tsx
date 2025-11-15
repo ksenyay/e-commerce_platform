@@ -73,7 +73,11 @@ const AudioPlayer = ({
 
   async function updateDownloadCount(id: string) {
     try {
-      await axios.patch(`/api/products/downloads/${id}`);
+      await axios.patch(
+        `http://localhost:4001/api/products/downloads/${id}`,
+        {},
+        { withCredentials: true }
+      );
     } catch (error) {
       console.log(error);
     }

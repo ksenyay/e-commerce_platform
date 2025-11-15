@@ -13,6 +13,11 @@ async function bootstrap() {
     (global as any).crypto = require('crypto');
   }
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   // Allows listening to events
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,

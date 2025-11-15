@@ -19,7 +19,7 @@ const Nav = ({ currentUser }: { currentUser: CurrentUser | undefined }) => {
   const [params, setParams] = useState<URLSearchParams>(new URLSearchParams());
 
   const { makeRequest } = useRequest({
-    url: "/api/users/signout",
+    url: "http://localhost:4000/api/users/signout",
     method: "post",
   });
 

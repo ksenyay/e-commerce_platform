@@ -13,7 +13,7 @@ export default async function Home({ params }: { params: { id: string } }) {
   let currentUser: CurrentUser | null = null;
 
   try {
-    const userRes = await client.get("/api/users/currentuser");
+    const userRes = await client.get("http://auth:4000/api/users/currentuser");
     currentUser = userRes.data.currentUser;
 
     if (currentUser) {

@@ -44,7 +44,9 @@ const ProductPage = ({ id, isLoggedIn, userId }: ProductPageProps) => {
   async function fetchData() {
     try {
       if (!product) {
-        const response = await axios.get(`/api/products/${id}`);
+        const response = await axios.get(
+          `http://localhost:4001/api/products/${id}`
+        );
         setProduct(response.data);
         return;
       }
@@ -54,7 +56,10 @@ const ProductPage = ({ id, isLoggedIn, userId }: ProductPageProps) => {
           setIsPurchased(true);
           return;
         }
-        const res = await axios.get(`/api/orders/users/${userId}`);
+        const res = await axios.get(
+          `http://localhost:4002/api/orders/users/${userId}`,
+          { withCredentials: true }
+        );
         const userProducts = res.data;
         setIsPurchased(
           userProducts.some(

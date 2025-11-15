@@ -25,7 +25,13 @@ const Sidebar = ({
 
   async function handlePurchase(id: string) {
     if (isLoggedIn) {
-      const order = await axios.post(`/api/orders`, { productId: id });
+      const order = await axios.post(
+        `http://localhost:4002/api/orders`,
+        {
+          productId: id,
+        },
+        { withCredentials: true }
+      );
       console.log(order.data);
 
       if (order) {

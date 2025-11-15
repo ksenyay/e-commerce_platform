@@ -12,9 +12,13 @@ const SuccessPage = () => {
 
   async function handleSuccessCase() {
     console.log(sessionId);
-    const res = await axios.post("/api/payments/success", {
-      sessionId,
-    });
+    const res = await axios.post(
+      "http://localhost:4003/api/payments/success",
+      {
+        sessionId,
+      },
+      { withCredentials: true }
+    );
 
     setProductId(res.data.productId);
   }

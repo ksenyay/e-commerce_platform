@@ -26,7 +26,9 @@ const Checkout = ({ id, email }: { id: string; email: string }) => {
 
   async function fetchOrder() {
     try {
-      const res = await axios.get(`/api/orders/${id}`);
+      const res = await axios.get(`http://localhost:4002/api/orders/${id}`, {
+        withCredentials: true,
+      });
       setOrder(res.data);
     } catch (err) {
       console.error(err);
@@ -34,7 +36,11 @@ const Checkout = ({ id, email }: { id: string; email: string }) => {
   }
 
   async function cancelOrder() {
-    await axios.patch(`/api/orders/${id}`);
+    await axios.patch(
+      `http://localhost:4002/api/orders/${id}`,
+      {},
+      { withCredentials: true }
+    );
     router.back();
   }
 
@@ -42,10 +48,14 @@ const Checkout = ({ id, email }: { id: string; email: string }) => {
     if (!order) return;
     try {
       setLoading(true);
-      const res = await axios.post("/api/payments/checkout", {
-        orderId: order.id,
-        email,
-      });
+      const res = await axios.post(
+        "http://localhost:4003/api/payments/checkout",
+        {
+          orderId: order.id,
+          email,
+        },
+        { withCredentials: true }
+      );
       window.location.href = res.data.url;
     } catch (error) {
       console.error(error);

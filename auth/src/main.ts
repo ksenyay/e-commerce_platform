@@ -13,6 +13,11 @@ async function bootstrap() {
     throw new Error('JWT_SECRET is not defined');
   }
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   app.use(
     cookieSession({
       signed: false,

@@ -33,12 +33,18 @@ const ProductsList = ({ userId }: ProductsListProps) => {
           params.category = category.toLowerCase();
         if (search) params.search = search.toLowerCase();
 
-        const resProducts = await axios.get(`/api/products`, { params });
+        const resProducts = await axios.get(
+          `http://localhost:4001/api/products`,
+          { params }
+        );
         let allProducts = resProducts.data.products;
         let total = resProducts.data.totalPages;
 
         if (showPurchased && userId) {
-          const resOrders = await axios.get(`/api/orders/users/${userId}`);
+          const resOrders = await axios.get(
+            `http://localhost:4002/api/orders/users/${userId}`,
+            { withCredentials: true }
+          );
           const purchasedIds = resOrders.data.map(
             (order: { product: Product }) => order.product.id
           );
